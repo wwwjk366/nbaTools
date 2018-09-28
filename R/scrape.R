@@ -32,7 +32,7 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
   return(params)
 }
 
-#' @importFrom httr GET content add_headers verbose
+#' @importFrom httr GET content add_headers verbose handle
 
 ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
   headers <- kHeaders[[source]]
