@@ -1,6 +1,6 @@
 Package: nbaTools
 Title: Scrape and Manipulate NBA Data
-Version: 0.1
+Version: 0.1.1
 Authors@R: person("Chirag", "Agrawal", email = "ccagrawal@gmail.com", role = c("aut", "cre"))
 Description: A combination of scrapers which gather NBA data from several sources
     and tools to manipulate and work with the data. The primary data sources are
