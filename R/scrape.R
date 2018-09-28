@@ -1,3 +1,5 @@
+#' @import httr
+
 GenerateParams <- function(param.keys, source = 'NBA', ...) {
   params <- list()
   kwargs <- list(...)
@@ -30,20 +32,23 @@ GenerateParams <- function(param.keys, source = 'NBA', ...) {
   return(params)
 }
 
-#' @importFrom httr GET content add_headers
+#' @importFrom httr GET content add_headers verbose
 
 ScrapeContent <- function(endpoint, params, referer, source = 'NBA') {
   headers <- kHeaders[[source]]
 
   if (source %in% c('NBA', 'NBA.Synergy')) {
     headers['Referer'] <- gsub('%referer%', referer, headers['Referer'])
+    h1 <- handle('')
 
     request <- GET(
       url = gsub('%endpoint%', endpoint, kBaseURL[[source]]),
       query = params,
-      do.call(add_headers, headers)
+      do.call(add_headers, headers),
+      handle = h1,
+      timeout(10)
+      # httr::verbose()
     )
-
     return(content(request, 'parsed'))
 
   } else if (source == 'BRef') {

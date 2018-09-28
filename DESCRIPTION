@@ -18,7 +18,7 @@ Imports:
     png,
     utils,
     XML,
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 6.1.0
 Collate: 
     'helper.R'
     'constants.R'
