@@ -1,0 +1,88 @@
+---
+title: "Scrape Valuable NBA Data from stats.nba.com"
+author: "Michael Yan"
+date: "Oct 28, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+New NBA season is coming up (in 2 weeks) and our office is busy organizing fantasy leagues. In order to do well on my first try of fantansy sports, I said to myself:"Why don't I build a machine learning model to predict the player performaces based on our fantasy leagues specific rules?". It shouldn't be that hard to come up with a simple model to help me draft players. So here comes to the very first question to every machine learning problem --- Data.
+
+Fortuneately, I came across this [reddit post](https://www.reddit.com/r/nba/comments/3k91g5/finally_some_documentation_for_the_statsnbacom_api/). I am really suprised that NBA.com has those API endpoints open to public! Moreover, there are already tools made for those endpoints in both R and Python! It is amazing that you can get almost any data you want from those endpoints(team stats, player stats, play-by-play, etc). Since I am a hardcore R person, I will do this in R
+ 
+## Install R package
+
+I did my research on this wonderful R package [nbaTools](https://github.com/ccagrawal/nbaTools). It's has not been taking care recently but its working mostly fine, except when scrape heavliy the nba.com will block you because of cookies. So I make a small change in the scrape function. The wokring version in on my github with version number **0.1.1** 
+
+```r
+install.packages("devtools")    # If you don't have devtools already installed
+devtools::install_github("wwwjk366/nbaTools")
+library(nbaTools)
+```
+
+The part I chagned are in the `scrape.R` file:
+
+```r
+ if (source %in% c('NBA', 'NBA.Synergy')) {
+    headers['Referer'] <- gsub('%referer%', referer, headers['Referer'])
+    h1 <- handle('')
+    request <- GET(
+      url = gsub('%endpoint%', endpoint, kBaseURL[[source]]),
+      query = params,
+      do.call(add_headers, headers),
+      handle = h1,
+      timeout(10)
+      # httr::verbose()
+    )
+    return(content(request, 'parsed'))
+```
+So by setting the handle manually `h1 <- handle('')` then calling the `GET` using `handle = h1` parameter. Let's verify this works:
+
+```{r}
+library(tidyverse)
+library(nbaTools)
+GetGames(Date = '2017-02-02')
+
+```
+
+Great! This pulled from `http://stats.nba.com/stat/scoreboardv2`. We can easily grab a very detailed data from NBA.com.
+
+They have a lot of endpoints availabl, for example:
+
+Box score for a game:
+
+```{r}
+GetBoxScore(GameID = '0021600794') %>% glimpse()
+```
+
+Play-by-Play:
+
+```{r}
+GetPlayByPlay(GameID = '0021600794') %>% glimpse()
+```
+
+
+Player Bios in playoffs:
+
+```{r}
+GetPlayerBioStats(SeasonType = 'Playoffs' ) %>% glimpse()
+```
+
+Player Real Plus-Minus(RPM)[link](https://deadspin.com/just-what-the-hell-is-real-plus-minus-espns-new-nba-s-1560361469)
+
+Or even some more interesting one like team shot dashboard:
+
+```{r}
+GetTeamShotDashboard(split = 'shot clock', TeamID = '1610612756') %>% glimpse()
+```
+
+Or even split it differently by dribble:
+
+```{r}
+GetTeamShotDashboard(split = 'dribble', TeamID = '1610612756') %>% glimpse()
+```
