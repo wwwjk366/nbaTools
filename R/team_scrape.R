@@ -88,6 +88,15 @@ GetTeamGeneralSplits <- function(split = 'location', ...) {
 
 GetTeamShotDashboard <- function(split = 'shot clock', ...) {
   endpoint <- 'teamdashptshots'
+  referer <- 'team'
+  ix <- 1
+
+  param.keys <- c('PerMode', 'GameSegment', 'LastNGames', 'DateFrom', 'DateTo',
+                  'Location', 'MeasureType', 'Month', 'OpponentTeamID', 'Outcome',
+                  'PORound', 'PaceAdjust', 'PerMode', 'Period', 'PlusMinus',
+                  'Rank', 'Season', 'SeasonSegment', 'SeasonType',
+                  'TeamID', 'VsConference', 'VsDivision', 'split')
+
 
   if (split == 'shot clock') {
     ix <- 2
@@ -103,7 +112,7 @@ GetTeamShotDashboard <- function(split = 'shot clock', ...) {
     return(NA)
   }
 
-  return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, ...))
+  return(GetTeamDashboard(source = 'NBA', endpoint = endpoint, ix = ix, param.keys, ...))
 }
 
 #' Team player stats

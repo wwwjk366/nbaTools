@@ -132,3 +132,31 @@ GetPlayerShootingSplits <- function(split = 'Areas', ...) {
 
   return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
 }
+
+
+
+
+#' Shot tracking
+#'
+#' @param ...
+#'
+#' @return data
+#' @export
+#'
+#' @examples
+#' GetShotChart( PlayerID = 2772,Season = "2017-18",SeasonType = "Regular Season", ContextMeasure = "FGA", TeamID = 0)
+GetShotChart <- function(...) {
+
+  endpoint <- 'shotchartdetail'
+  referer <- 'player'
+  ix <- 1
+
+
+  param.keys <- c('DateFrom', 'DateTo', 'GameSegment', 'LastNGames', 'LeagueID', 'Location', 'MeasureType',
+                  'Month', 'OpponentTeamID', 'Outcome', 'Position', 'PaceAdjust', 'PerMode', 'Period',
+                  'PlayerID', 'PlusMinus', 'Rank', 'Season', 'SeasonSegment', 'SeasonType', 'ShotClockRange',
+                  'RookieYear', 'VsConference', 'VsDivision', 'PlayerPosition', 'ContextMeasure','GameID')
+
+
+  return(GetData(endpoint, referer, ix, param.keys, source = 'NBA', ...))
+}
